@@ -7,6 +7,7 @@
     <title>Watch Youtube Videos With Your Friends</title>
   </head>
   <body>
+<div class="all">
 <h1>Welcome</h1>
 <h3>Watch Youtube Videos With Your Friends Synchronously.</h3>
 <div class="main">
@@ -14,10 +15,50 @@
 
 </div>
   <div class="btns">
-<div  class="btn xxx" style="">Start New Player</div>
-<div  class="btn hvr-bounce-to-bottom">Have a Code</div>
+<div  class="btn xxx btn1" style="">Start New Player</div>
+<div  class="btn hvr-bounce-to-bottom btn2">Have a Code</div>
 
   </div>
 </div>
+</div>
+<div class="first-form first">
+  <h1 style="color:#ffffff;   margin-top: 30vh;">Please Enter The Video url</h1>
+  <form class="" action="video/" method="get">
+    <input type="text" name="url" value="" placeholder="Youtube URL">
+    <button type="submit" name="submit">Start</button>
+  </form>
+</div>
+<div class="first-form second">
+  <h1 style="color:#ffffff;   margin-top: 30vh;">Please Enter Your Invitation Code</h1>
+  <form class="" action="code/" method="get">
+    <input type="text" name="code" value="" placeholder="Code">
+    <button type="submit" name="submit" >Go</button>
+  </form>
+</div>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript">
+$(".btn1").click(()=>{
+$(".first").show("fade",200);
+
+
+
+});
+$(".btn2").click(()=>{
+$(".second").show("fade",200);
+
+
+
+});
+
+
+  </script>
+
   </body>
 </html>
