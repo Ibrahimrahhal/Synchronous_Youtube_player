@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <style media="screen">
+    body{
+padding: 0;
+margin: 0;
+    }
+    .all{
+      background: #121212; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%;
+      height: 100vh;
+    }
+    h1,h2,h3{
+      font-family: "Open Sans";
+      text-align:center;
+      color:
+      #ffffff;
+    }
+    h1{margin:0;
+    padding:20px;
+  background-color: #ffffff;
+color: #121212;}
+      .player-cont{
+        width: 640px;
+        height: 390px;
+        margin: 0 auto;
+        margin-top: 40px;
+
+        background-color: #121212;
+        border: solid 3px #ffffff;
+        border-radius: 5px;
+/* padding: 10px; */
+display: flex;
+align-items:center;
+justify-content: center;
+      }
+      .messages{
+        position: absolute;
+        z-index: 5;
+        bottom: 0;
+        right: 20px;
+        width: 300px;
+        background-color: #ffffff;
+        color: #121212;
+        font-family: "Open Sans";
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+    .messages  .box{
+        height: 0;
+        /* transition: all 0.4s; */
+        overflow: hidden;
+        /* padding: 0 4px; */
+        position: relative;
+        border-radius: 5px 5px 0 0;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .box h2{
+        color: #121212;
+        text-align: center;
+      }
+      .box .name{
+        margin:0;
+        color:#ffffff;
+        background-color: #121212	;
+        padding: 5px;
+        display: inline-block;
+       }
+       .box .text{
+         margin: 0;
+         padding-left:15px;
+         font-family: Cairo;
+        }
+      .m-active .box{
+        height: 300px;
+      }
+
+      .label h4{
+        margin: 10px;
+      }
+      .input{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /* position: absolute;
+        bottom: 0; */
+
+      }
+      input{
+        height: 30px;
+        width: 230px;
+box-sizing: border-box;
+border-style: none;
+border-bottom:1px solid #121212;
+border-radius: 5px;
+
+
+      }
+      input:focus{
+        outline: 0;
+      }
+      .box-all{
+        height: 220px;
+        overflow-y: scroll;
+      }
+      .input .btn {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: "Open Sans";
+        width: 110px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin-top: 3px;
+        border-radius: 5px;
+      }
+      .label{
+        cursor: pointer;
+      }
+      /* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #121212;
+  border-radius: 3px;
+}
+.message{
+  margin-bottom: 10px;
+}
+
+
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+
+    <title>Watch</title>
+  </head>
+  <body>
+    <div class="all">
+
+
+    <h1>Welcome</h1>
+    <!-- <h3 id="loading">Loading Invitaion Code</h3>
+    <h3 id="code"></h3> -->
+    <div class="player-cont">
+
+    <div id="player"></div>
+  </div>
+  <div class="messages">
+    <div class="box">
+      <div class="box-all">
+
+      <div class="box-title">
+        <h2>Chat With Your Guest</h2>
+      </div>
+      <div class="mcont">
+      <div class="message">
+
+      </div>
+      </div>
+    </div>
+
+      <div class="input">
+        <input type="text" class="m-text" value="">
+        <div class="btn">
+          send
+        </div>
+      </div>
+    </div>
+    <div class="label">
+      <h4>Messages</h4>
+    </div>
+  </div>
+</div>
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      url_id = "{{url}}";
+      code = "{{code}}"
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: url_id,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+
+      function stopVideo() {
+        player.stopVideo();
+      }
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js">
+
+    </script>
+    <script type="text/javascript">
+
+    var outsideChange=false;
+    var player;
+    var socket = io("/guest");
+    // socket.on("connect",()=>{
+    //
+    // });
+    function onPlayerReady(event) {
+      player = event.target;
+      socket.emit("getTime");
+    }
+    socket.emit("code",code);
+    socket.on("seek",(time)=>{
+      outsideChange=true;
+
+      player.seekTo(time+5, true);
+  });
+  socket.on("play",(time)=>{
+    outsideChange=true;
+    player.playVideo();
+    player.seekTo(time+5, true);
+});
+  socket.on("pairDisconnected",()=>{
+    window.location.replace("/disconnected");
+  });
+  socket.on("pause",()=>{
+    outsideChange=true;
+    player.pauseVideo()
+
+  });
+  socket.on("sms",(message)=>{
+    addMessage("Host",message);
+    if($(".label h4").html()==="Messages")
+    $(".label h4").html("You Have New Messages");
+
+
+  });
+  function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING && !done) {
+      done = true;
+    }else{
+      if(event.data == YT.PlayerState.PAUSED){
+        if(!outsideChange)
+        socket.emit("pause");
+        outsideChange=false;
+      }
+      if(event.data == YT.PlayerState.PLAYING && done){
+        if(!outsideChange)
+        socket.emit("play",player.getCurrentTime());
+        outsideChange=false;
+
+      }
+
+
+    }
+  }
+
+    </script>
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    var boxIsActive = false;
+      $(".label").click(()=>{
+        $(".messages").toggleClass("m-active");
+        if(boxIsActive){
+           boxIsActive = false;
+           $(".label h4").html("Messages");
+         } else{
+            boxIsActive=true;
+            $(".label h4").html("Close");
+
+          }
+
+      });
+      $(".btn").click(()=>{
+        let x= $("input").val();
+        if(x===""){}else{
+        socket.emit("sms",x);
+        addMessage("Guest",x);
+      }
+      });
+      function addMessage(name,message){
+        let str = `<div class="message">
+          <h5 class="name">${name}</h5>
+          <h5 class="text">${message}</h5>
+        </div>`;
+
+        str=$(".mcont").html()+str;
+        console.log(str);
+        $(".mcont").html(str);
+
+
+      }
+    </script>
+  </body>
+</html>
