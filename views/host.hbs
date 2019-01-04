@@ -47,6 +47,7 @@ justify-content: center;
         font-family: "Open Sans";
         text-align: center;
         border-radius: 5px 5px 0 0;
+        display: none;
       }
     .messages  .box{
         height: 0;
@@ -274,6 +275,7 @@ border-radius: 5px;
     });
     socket.on("pairConnected",()=>{
       connected=true;
+      $(".Messages").css("display", "block");
 
     document.getElementById('code').innerHTML = "";
     document.getElementById("loading").innerHTML = "Your Guest is connected";
@@ -315,7 +317,8 @@ border-radius: 5px;
   socket.on("pairDisconnected",()=>{
     document.getElementById('code').innerHTML = "";
     document.getElementById("loading").innerHTML = "Your Guest Has Disconnected";
-    document.getElementsByClassName("messages")[0].innerHTML = "";
+    $(".Messages").css("display", "none");
+
   });
 socket.on("sms",(message)=>{
   addMessage("Guest",message);
