@@ -23,6 +23,10 @@ h3{
   height: 350px;
   display: block;
   margin: 0 auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("icon.svg");
 }
 .btns{
   /* display: flex;
