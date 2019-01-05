@@ -32,9 +32,15 @@ color: #121212;}
         border: solid 3px #ffffff;
         border-radius: 5px;
 /* padding: 10px; */
+display: -webkit-box;
+display: -ms-flexbox;
 display: flex;
-align-items:center;
-justify-content: center;
+-webkit-box-align:center;
+    -ms-flex-align:center;
+        align-items:center;
+-webkit-box-pack: center;
+    -ms-flex-pack: center;
+        justify-content: center;
       }
       .messages{
         position: absolute;
@@ -57,9 +63,16 @@ justify-content: center;
         position: relative;
         border-radius: 5px 5px 0 0;
         text-align: left;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
       }
       .box h2{
         color: #121212;
@@ -86,11 +99,20 @@ justify-content: center;
         margin: 10px;
       }
       .input{
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
         width: 100%;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
         /* position: absolute;
         bottom: 0; */
 
@@ -98,7 +120,8 @@ justify-content: center;
       input{
         height: 30px;
         width: 230px;
-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+        box-sizing: border-box;
 border-style: none;
 border-bottom:1px solid #121212;
 border-radius: 5px;
@@ -118,9 +141,15 @@ border-radius: 5px;
         font-family: "Open Sans";
         width: 110px;
         height: 30px;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
         cursor: pointer;
         margin-top: 3px;
         border-radius: 5px;
@@ -209,7 +238,11 @@ border-radius: 5px;
       if(ampersandPosition != -1) {
         video_id = video_id.substring(0, ampersandPosition);
         url_id = video_id;
-      }}
+      }else{
+        url_id = video_id;
+      }
+
+    }
       else
       {
          if(url.includes("youtu.be")){
@@ -219,7 +252,11 @@ border-radius: 5px;
         if(ampersandPosition != -1) {
           video_id = video_id.substring(0, ampersandPosition);
           url_id = video_id;
-        }}
+        }else{
+          url_id = video_id;
+        }
+
+      }
           else {
             window.location.replace("/urlerror");
 
