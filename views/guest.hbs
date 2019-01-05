@@ -145,7 +145,7 @@ border-radius: 5px;
   border-radius: 3px;
 }
 .message{
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 
@@ -231,7 +231,7 @@ border-radius: 5px;
 
     </script>
     <script type="text/javascript">
-
+    var audio = new Audio('../assets/sound.mp3');
     var outsideChange=false;
     var player;
     var socket = io("/guest");
@@ -262,9 +262,12 @@ border-radius: 5px;
 
   });
   socket.on("sms",(message)=>{
-    addMessage("Host",message);
+    addMessage(lastSender,"Host",message);
+    lastSender = "Host";
+
     if($(".label h4").html()==="Messages")
     $(".label h4").html("You Have New Messages");
+    audio.play();
 
 
   });
@@ -294,6 +297,7 @@ border-radius: 5px;
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
     <script type="text/javascript">
+    var lastSender="non";
     var boxIsActive = false;
       $(".label").click(()=>{
         $(".messages").toggleClass("m-active");
@@ -311,18 +315,44 @@ border-radius: 5px;
         let x= $("input").val();
         if(x===""){}else{
         socket.emit("sms",x);
-        addMessage("Guest",x);
+        addMessage(lastSender,"You",x);
+        lastSender = "You";
+
       }
       });
-      function addMessage(name,message){
-        let str = `<div class="message">
-          <h5 class="name">${name}</h5>
+      $('input').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+          let x= $("input").val();
+
+          if(x===""){}else{
+          $("input").val("");
+          addMessage(lastSender,"You",x);
+          socket.emit("sms",x);
+          lastSender = "You";
+
+        }
+        }
+      });
+      function addMessage(lastSender,name,message){
+        let str="";
+        if(lastSender===name){
+         str = `<div class="message" style="margin:0;">
           <h5 class="text">${message}</h5>
         </div>`;
-
-        str=$(".mcont").html()+str;
+}else{
+   str = `<div class="message">
+   <h5 class="name">${name}</h5>
+   <h5 class="text">${message}</h5>
+ </div>`;
+}
+        let d=$(".mcont");
+        let x=$(".box-all")
+        str=d.html()+str;
         console.log(str);
-        $(".mcont").html(str);
+        d.html(str);
+        x.scrollTop(x.prop("scrollHeight"));
 
 
       }

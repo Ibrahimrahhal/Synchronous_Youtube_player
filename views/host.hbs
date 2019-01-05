@@ -145,7 +145,7 @@ border-radius: 5px;
   border-radius: 3px;
 }
 .message{
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
     </style>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Cairo" rel="stylesheet">
@@ -262,6 +262,7 @@ border-radius: 5px;
     <script type="text/javascript">
     var outsideChange  =false;
     var connected = false;
+    var audio = new Audio('../assets/sound.mp3');
     var socket = io("/host");
     socket.on("connect",()=>{
       console.log(url_id);
@@ -275,7 +276,7 @@ border-radius: 5px;
     });
     socket.on("pairConnected",()=>{
       connected=true;
-      $(".Messages").css("display", "block");
+      $(".messages").css("display", "block");
 
     document.getElementById('code').innerHTML = "";
     document.getElementById("loading").innerHTML = "Your Guest is connected";
@@ -317,13 +318,15 @@ border-radius: 5px;
   socket.on("pairDisconnected",()=>{
     document.getElementById('code').innerHTML = "";
     document.getElementById("loading").innerHTML = "Your Guest Has Disconnected";
-    $(".Messages").css("display", "none");
+    $(".messages").css("display", "none");
 
   });
 socket.on("sms",(message)=>{
-  addMessage("Guest",message);
+  addMessage(lastSender,"Guest",message);
+  lastSender = "Guest";
   if($(".label h4").html()==="Messages")
   $(".label h4").html("You Have New Messages");
+  audio.play();
 
 });
     </script>
@@ -332,6 +335,7 @@ socket.on("sms",(message)=>{
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
     <script type="text/javascript">
+    var lastSender="non";
     var boxIsActive = false;
       $(".label").click(()=>{
         $(".messages").toggleClass("m-active");
@@ -345,23 +349,49 @@ socket.on("sms",(message)=>{
           }
 
       });
+      $('input').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+          let x= $("input").val();
+
+          if(x===""){}else{
+          $("input").val("");
+          addMessage(lastSender,"You",x);
+          socket.emit("sms",x);
+          lastSender = "You";
+
+        }
+        }
+      });
       $(".btn").click(()=>{
         let x= $("input").val();
         if(x===""){}else{
-        addMessage("Host",x);
+        $("input").val("");
+        addMessage(lastSender,"You",x);
         socket.emit("sms",x);
+        lastSender = "You";
 
       }
       });
-      function addMessage(name,message){
-        let str = `<div class="message">
-          <h5 class="name">${name}</h5>
+      function addMessage(lastSender,name,message){
+        let str="";
+        if(lastSender===name){
+         str = `<div class="message" style="margin:0;">
           <h5 class="text">${message}</h5>
         </div>`;
-
-        str=$(".mcont").html()+str;
+}else{
+   str = `<div class="message">
+   <h5 class="name">${name}</h5>
+   <h5 class="text">${message}</h5>
+ </div>`;
+}
+        let d=$(".mcont");
+        let x=$(".box-all")
+        str=d.html()+str;
         console.log(str);
-        $(".mcont").html(str);
+        d.html(str);
+        x.scrollTop(x.prop("scrollHeight"));
 
 
       }
